@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Registry", "Registry\Regist
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientGUI", "ClientGUI\ClientGUI.csproj", "{BA5A53A5-86A1-4C5F-A6A9-71A8E5354E4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authenticator", "Authenticator\Authenticator.csproj", "{5D73BA8D-28BD-442C-98FB-03DF27ED2127}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{BA5A53A5-86A1-4C5F-A6A9-71A8E5354E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA5A53A5-86A1-4C5F-A6A9-71A8E5354E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA5A53A5-86A1-4C5F-A6A9-71A8E5354E4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D73BA8D-28BD-442C-98FB-03DF27ED2127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D73BA8D-28BD-442C-98FB-03DF27ED2127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D73BA8D-28BD-442C-98FB-03DF27ED2127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D73BA8D-28BD-442C-98FB-03DF27ED2127}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
