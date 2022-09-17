@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MathAppClassLibrary
 {
     /**
-     * For saving/loading user info in a file
+     * Save/Load/Delete user info in a file
      */
     public class FileManager
     {
@@ -87,33 +87,9 @@ namespace MathAppClassLibrary
             return listUser;
         }
 
-
-
-        /** ---- Test Functions ---- */
-
-        public static void TestWriteToFile(FileManager fileManager)
+        public void DeleteUserFile()
         {
-            Console.WriteLine("Enter a username: ");
-            string username = Console.ReadLine();
-
-            Console.WriteLine("Enter a password: ");
-            string password = Console.ReadLine();
-
-            fileManager.SaveUserInfo(username, password);
-        }
-
-        public static void TestReadFile(FileManager fileManager)
-        {
-            List<User> listUser = fileManager.LoadUserInfo();
-
-            Console.WriteLine("File contains:\n");
-            for (int i = 0; i < listUser.Count; i++)
-            {
-                Console.WriteLine("User " + (i + 1)
-                    + "\n\tUsername: " + listUser[i].username
-                    + " | Password: " + listUser[i].password
-                );
-            }
+            File.Delete(accountFilePath);
         }
     }
 }
