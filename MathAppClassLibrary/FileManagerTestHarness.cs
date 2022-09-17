@@ -21,6 +21,7 @@ namespace MathAppClassLibrary
             fileManagerTester.TestSaveUserInfo();
             fileManagerTester.TestLoadUserInfo();
             fileManagerTester.TestDeleteUserFile();
+            fileManagerTester.TestLoadUserInfo();
         }
 
         public void TestSaveUserInfo()
@@ -38,13 +39,18 @@ namespace MathAppClassLibrary
         {
             List<User> listUser = fileManager.LoadUserInfo();
 
-            Console.WriteLine("File contains:\n");
-            for (int i = 0; i < listUser.Count; i++)
+            bool listIsNotEmpty = listUser.Count != 0;
+            if (listIsNotEmpty)
             {
-                Console.WriteLine("User " + (i + 1)
-                    + "\n\tUsername: " + listUser[i].username
-                    + " | Password: " + listUser[i].password
-                );
+                // Show file contains
+                Console.WriteLine("File contains:\n");
+                for (int i = 0; i < listUser.Count; i++)
+                {
+                    Console.WriteLine("User " + (i + 1)
+                        + "\n\tUsername: " + listUser[i].username
+                        + " | Password: " + listUser[i].password
+                    );
+                }
             }
         }
 

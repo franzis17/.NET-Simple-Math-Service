@@ -16,6 +16,7 @@ namespace TesterConsoleApp
         static void Main(string[] args)
         {
             FileManagerTestHarness.Test();
+            Console.ReadLine();
         }
     }
 }

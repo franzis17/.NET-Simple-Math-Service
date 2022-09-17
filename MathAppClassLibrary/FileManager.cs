@@ -12,12 +12,12 @@ namespace MathAppClassLibrary
      */
     public class FileManager
     {
-        private string accountFilePath;
+        private string userFilePath;
         private string tokenFilePath;
 
         public FileManager()
         {
-            accountFilePath = "accounts.txt";
+            userFilePath = "accounts.txt";
             tokenFilePath = "tokens.txt";
         }
 
@@ -28,13 +28,13 @@ namespace MathAppClassLibrary
                 StreamWriter streamWriter = null;
 
                 // Create new file if file doesn't exist yet else get existing one
-                if (!File.Exists(accountFilePath))
+                if (!File.Exists(userFilePath))
                 {
-                    streamWriter = File.CreateText(accountFilePath);
+                    streamWriter = File.CreateText(userFilePath);
                 }
                 else
                 {
-                    streamWriter = File.AppendText(accountFilePath);
+                    streamWriter = File.AppendText(userFilePath);
                 }
 
                 if (streamWriter != null)
@@ -53,18 +53,18 @@ namespace MathAppClassLibrary
         {
             List<User> listUser = new List<User>();
 
-            Console.WriteLine("Reading file: " + accountFilePath + "\n");
+            Console.WriteLine("Reading file: " + userFilePath + "\n");
 
             try
             {
-                if (!File.Exists(accountFilePath))
+                if (!File.Exists(userFilePath))
                 {
-                    Console.WriteLine("Error: Cannot read file because " + accountFilePath + " doesn't exist.");
+                    Console.WriteLine("Error: Cannot read file because " + userFilePath + " doesn't exist.");
                 }
                 else
                 {
                     string fileStr = "";
-                    StreamReader streamReader = File.OpenText(accountFilePath);
+                    StreamReader streamReader = File.OpenText(userFilePath);
 
                     while ((fileStr = streamReader.ReadLine()) != null)
                     {
@@ -77,6 +77,8 @@ namespace MathAppClassLibrary
                         string password = line[1];
                         listUser.Add(new User(username, password));
                     }
+
+                    streamReader.Close();
                 }
             }
             catch (IOException io_exc)
@@ -89,7 +91,8 @@ namespace MathAppClassLibrary
 
         public void DeleteUserFile()
         {
-            File.Delete(accountFilePath);
+            Console.WriteLine("\nDeleting " + userFilePath);
+            File.Delete(userFilePath);
         }
     }
 }
