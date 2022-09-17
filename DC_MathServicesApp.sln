@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientGUI", "ClientGUI\Clie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authenticator", "Authenticator\Authenticator.csproj", "{5D73BA8D-28BD-442C-98FB-03DF27ED2127}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathAppClassLibrary", "MathAppClassLibrary\MathAppClassLibrary.csproj", "{E0052D78-58CB-4CA4-A4E4-9AFAC97857AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{5D73BA8D-28BD-442C-98FB-03DF27ED2127}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D73BA8D-28BD-442C-98FB-03DF27ED2127}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D73BA8D-28BD-442C-98FB-03DF27ED2127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0052D78-58CB-4CA4-A4E4-9AFAC97857AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0052D78-58CB-4CA4-A4E4-9AFAC97857AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0052D78-58CB-4CA4-A4E4-9AFAC97857AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0052D78-58CB-4CA4-A4E4-9AFAC97857AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
