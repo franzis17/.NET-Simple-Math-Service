@@ -12,11 +12,13 @@ namespace MathAppClassLibrary
      */
     public class FileManager
     {
-        private string filePath;
+        private string accountFilePath;
+        private string tokenFilePath;
 
-        public FileManager(string filePath)
+        public FileManager()
         {
-            this.filePath = filePath;
+            accountFilePath = "accounts.txt";
+            tokenFilePath = "tokens.txt";
         }
 
         public void SaveUserInfo(string username, string password)
@@ -26,13 +28,13 @@ namespace MathAppClassLibrary
                 StreamWriter streamWriter = null;
 
                 // Create new file if file doesn't exist yet else get existing one
-                if (!File.Exists(filePath))
+                if (!File.Exists(accountFilePath))
                 {
-                    streamWriter = File.CreateText(filePath);
+                    streamWriter = File.CreateText(accountFilePath);
                 }
                 else
                 {
-                    streamWriter = File.AppendText(filePath);
+                    streamWriter = File.AppendText(accountFilePath);
                 }
 
                 if (streamWriter != null)
@@ -51,18 +53,18 @@ namespace MathAppClassLibrary
         {
             List<User> listUser = new List<User>();
 
-            Console.WriteLine("Reading file: " + filePath + "\n");
+            Console.WriteLine("Reading file: " + accountFilePath + "\n");
 
             try
             {
-                if (!File.Exists(filePath))
+                if (!File.Exists(accountFilePath))
                 {
-                    Console.WriteLine("Error: Cannot read file because " + filePath + " doesn't exist.");
+                    Console.WriteLine("Error: Cannot read file because " + accountFilePath + " doesn't exist.");
                 }
                 else
                 {
                     string fileStr = "";
-                    StreamReader streamReader = File.OpenText(filePath);
+                    StreamReader streamReader = File.OpenText(accountFilePath);
 
                     while ((fileStr = streamReader.ReadLine()) != null)
                     {

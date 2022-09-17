@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authenticator", "Authentica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathAppClassLibrary", "MathAppClassLibrary\MathAppClassLibrary.csproj", "{E0052D78-58CB-4CA4-A4E4-9AFAC97857AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesterConsoleApp", "TesterConsoleApp\TesterConsoleApp.csproj", "{F7DDDC6E-53BF-4B64-9476-8EB7E2E5B9B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{E0052D78-58CB-4CA4-A4E4-9AFAC97857AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0052D78-58CB-4CA4-A4E4-9AFAC97857AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0052D78-58CB-4CA4-A4E4-9AFAC97857AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7DDDC6E-53BF-4B64-9476-8EB7E2E5B9B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7DDDC6E-53BF-4B64-9476-8EB7E2E5B9B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7DDDC6E-53BF-4B64-9476-8EB7E2E5B9B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7DDDC6E-53BF-4B64-9476-8EB7E2E5B9B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

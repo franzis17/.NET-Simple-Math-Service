@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Authenticator
 {
+    /**
+     * Interface of Authenticator
+     */
     [ServiceContract]
     public interface IAuth
     {

@@ -8,15 +8,28 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
+using MathAppClassLibrary;
+
 namespace Authenticator
 {
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
 
+    /**
+     * This is the implementation of Authenticator Interface
+     */
     internal class ImplAuth : IAuth
     {
+        private FileManager fileManager;
+
+        public ImplAuth()
+        {
+            fileManager = new FileManager();
+        }
+
         public string Register(string username, string password)
         {
             // save username and password in a local text file
+            
 
             // return "Successfully registered" if successful
             return "Sucessfully Registered";
