@@ -29,5 +29,10 @@ namespace MathAppClassLibrary
         {
             return password;
         }
+
+        public bool Matches(string username, string password)
+        {
+            return String.Equals(this.username, username) && String.Equals(this.password, password);
+        }
     }
 }

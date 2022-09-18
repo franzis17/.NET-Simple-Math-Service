@@ -15,7 +15,7 @@ namespace TesterConsoleApp
     {
         static void Main(string[] args)
         {
-            FileManagerTestHarness.Test();
+            FileManagerTestHarness.TestTokens();
             Console.ReadLine();
         }
     }

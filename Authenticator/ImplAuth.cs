@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
 using MathAppClassLibrary;
+using System.ServiceModel.Security.Tokens;
 
 namespace Authenticator
 {
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
 
     /**
-     * This is the implementation of Authenticator Interface
+     * Implementation of Authenticator Interface
      */
     internal class ImplAuth : IAuth
     {
@@ -29,29 +30,47 @@ namespace Authenticator
         public string Register(string username, string password)
         {
             // save username and password in a local text file
-            
-
-            // return "Successfully registered" if successful
-            return "Sucessfully Registered";
+            bool userInfoSaved = fileManager.SaveUserInfo(username, password);
+            if (userInfoSaved)
+            {
+                return "Sucessfully Registered";
+            }
+            return "Error: Failed to save user info";
         }
 
         public int Login(string username, string password)
         {
-            int rand_int = 123;
+            int token = 0;
 
             // Load the user info from the local text file
-            
-            // If a match is found, create a token(random integer) then save it to another local text file
-            
+            List<User> userList = fileManager.LoadUserInfo();
 
-            // return token to the actor who called the function
-            return rand_int;
+            if (userList.Count != 0)
+            {
+                // If a match is found, create a token(random integer) then save it to tokens txt file
+                foreach (User user in userList)
+                {
+                    if (user.Matches(username, password))
+                    {
+                        token = Token.CreateRandomInt();
+                        fileManager.SaveToken(token);
+                    }
+                }
+            }
+
+            return token;
         }
 
-        public string Validate(string username, string password)
+        public string Validate(int token)
         {
-            // If token is already generated, return “validate” else “not validated”
-            return "Not Validated";
+            // If token is already generated, return “validated” else “not validated”
+            return "validated";
         }
+
+        /**
+         * TBD: Internal function that deletes saved tokens every 'x' minutes
+         * Console should ask the number of minutes for periodical clean-up
+         *   - MUST use multithreading
+         */
     }
 }

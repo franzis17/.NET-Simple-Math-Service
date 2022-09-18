@@ -20,6 +20,6 @@ namespace Authenticator
         int Login(string username, string password);
 
         [OperationContract]
-        string Validate(string username, string password);
+        string Validate(int token);
     }
 }
