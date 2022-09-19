@@ -1,27 +1,29 @@
 ﻿using Registry.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using Newtonsoft.Json;
 
 namespace Registry.Controllers
 {
     [RoutePrefix("api/registry")]
     public class RegistryController : ApiController
     {
+        private Authenticator.IAuth authenticator;
 
-        public IEnumerable<Service> GetServices()
+        public RegistryController()
+        {
+            
+        }
+
+        private IEnumerable<Service> GetServices()
         {
             return ServiceList.AllServices();
         }
 
-        [Route("services/{searchTerm}")]
+        [Route("services/{token}/{searchTerm}")]
         [Route("services")]
         [HttpGet]
-        public IHttpActionResult GetServiceBySearch(string searchTerm)
+        public IHttpActionResult GetServiceBySearch(AuthenticationToken token, string searchTerm)
         {
             //validate user
             //if user OK
@@ -50,9 +52,9 @@ namespace Registry.Controllers
             }
         }
 
-        [Route("services")]
+        [Route("services/{token}")]
         [HttpGet]
-        public IHttpActionResult GetAllServices()
+        public IHttpActionResult GetAllServices(AuthenticationToken token)
         {
             //validate user
             //if user OK
@@ -79,10 +81,10 @@ namespace Registry.Controllers
             }
         }
 
-        [Route("publish/{service}")]
+        [Route("publish/{token}/{service}")]
         [Route("publish")]
         [HttpPost]
-        public IHttpActionResult PostNewService(Service service)
+        public IHttpActionResult PostNewService(AuthenticationToken token, Service service)
         {
             //validate user
             //if user OK
@@ -100,13 +102,13 @@ namespace Registry.Controllers
                 return BadRequest("Invalid Data");
             }
             ServiceList.PublishService(service);
-            return Ok();
+            return Ok(new InvalidUserModel() { Status = "Denied", Reason = "Authentication Error" });
         }
 
-        [Route("unpublish/{service}")]
+        [Route("unpublish/{token}/{service}")]
         [Route("unpublish")]
         [HttpPost]
-        public IHttpActionResult PostRemoveService(Service service)
+        public IHttpActionResult PostRemoveService(AuthenticationToken token, Service service)
         {
             if (!ModelState.IsValid)
             {
