@@ -1,10 +1,10 @@
-﻿[
+[
   {
-      "Name": "ADDTwoNumbers",
-      "Description": "Adding two numbers",
-      "Endpoint": "http://localhost:port/ADDTwoNumbers",
-      "Operands": 2,
-      "OperandType": "integer"
+    "Name": "ADDTwoNumbers",
+    "Description": "Adding two numbers",
+    "Endpoint": "http://localhost:port/ADDTwoNumbers",
+    "Operands": 2,
+    "OperandType": "integer"
   },
   {
     "Name": "ADDThreeNumbers",

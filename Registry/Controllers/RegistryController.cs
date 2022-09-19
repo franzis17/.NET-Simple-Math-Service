@@ -21,7 +21,7 @@ namespace Registry.Controllers
         [Route("services/{searchTerm}")]
         [Route("services")]
         [HttpGet]
-        public IHttpActionResult searchServices(string searchTerm)
+        public IHttpActionResult GetServiceBySearch(string searchTerm)
         {
             //validate user
             //if user OK
@@ -33,7 +33,7 @@ namespace Registry.Controllers
 
             var searchResults = new List<Service>();
 
-            foreach (Service service in ServiceList.AllServices())
+            foreach (Service service in GetServices())
             {
                 if (service.Description.ToLower().Contains(searchTerm.ToLower()) || service.Name.ToLower().Contains(searchTerm.ToLower()))
                 {
@@ -42,7 +42,7 @@ namespace Registry.Controllers
             }
             if (searchResults.Count() > 0)
             {
-                return Ok(JsonConvert.SerializeObject(searchResults));
+                return Ok(searchResults);
             }
             else
             {
@@ -52,7 +52,7 @@ namespace Registry.Controllers
 
         [Route("services")]
         [HttpGet]
-        public IHttpActionResult allServices()
+        public IHttpActionResult GetAllServices()
         {
             //validate user
             //if user OK
@@ -63,15 +63,15 @@ namespace Registry.Controllers
 
             var searchResults = new List<Service>();
 
-            foreach (Service service in ServiceList.AllServices())
+            foreach (Service service in GetServices())
             {
                 searchResults.Add(service);
             }
 
             if (searchResults.Count() > 0)
             {
-                var json = JsonConvert.SerializeObject(searchResults);
-                return Ok(json);
+
+                return Ok(searchResults);
             }
             else
             {
@@ -82,7 +82,7 @@ namespace Registry.Controllers
         [Route("publish/{service}")]
         [Route("publish")]
         [HttpPost]
-        public IHttpActionResult publishService(Service service)
+        public IHttpActionResult PostNewService(Service service)
         {
             //validate user
             //if user OK
@@ -94,7 +94,35 @@ namespace Registry.Controllers
                     //return BadRequest("Invalid Data")
             //else user is not OK
                 //return BadRequest(Bad request JSON)
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Data");
+            }
+            ServiceList.PublishService(service);
             return Ok();
+        }
+
+        [Route("unpublish/{service}")]
+        [Route("unpublish")]
+        [HttpPost]
+        public IHttpActionResult PostRemoveService(Service service)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Data");
+            }
+
+            if (ServiceList.DeleteService(service))
+            {
+                //found service and deleted
+                return Ok();
+            }
+            else
+            {
+                //did not find service
+                return BadRequest();
+            }
         }
     }
 }
