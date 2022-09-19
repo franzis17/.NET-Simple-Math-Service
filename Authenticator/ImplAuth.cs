@@ -27,9 +27,9 @@ namespace Authenticator
             fileManager = new FileManager();
         }
 
+        /** Save username and password in a local text file */
         public string Register(string username, string password)
         {
-            // save username and password in a local text file
             bool userInfoSaved = fileManager.SaveUserInfo(username, password);
             if (userInfoSaved)
             {
@@ -61,10 +61,21 @@ namespace Authenticator
             return token;
         }
 
+        /**
+         * Validate if param{token} is already generated in the list
+         *   - RETURN “validated” if token has been generated already else “not validated”
+         */
         public string Validate(int token)
         {
-            // If token is already generated, return “validated” else “not validated”
-            return "validated";
+            List<Token> tokenList = fileManager.LoadTokenList();
+            foreach (Token listToken in tokenList)
+            {
+                if (token == listToken.random_int)
+                {
+                    return "validated";
+                }
+            }
+            return "not validated";
         }
 
         /**

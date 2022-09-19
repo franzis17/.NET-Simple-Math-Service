@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticatorSingleton.cs" />
     <Compile Include="ImplAuth.cs" />
     <Compile Include="IAuth.cs" />
     <Compile Include="Program.cs" />

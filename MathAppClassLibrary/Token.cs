@@ -11,7 +11,7 @@ namespace MathAppClassLibrary
      */
     public class Token
     {
-        public static Random random = new Random();
+        private static Random random = new Random();
 
         public int random_int;
 
@@ -20,6 +20,7 @@ namespace MathAppClassLibrary
             this.random_int = random_int;
         }
 
+        /** Create a random int ranging from 1 to 50000 */
         public static int CreateRandomInt()
         {
             return random.Next(1, 50000);
