@@ -19,5 +19,12 @@
     "Endpoint": "http://localhost:port/MULThreeNumbers",
     "Operands": 3,
     "OperandType": "integer"
+  },
+  {
+    "Name": "MulTwoNumbers",
+    "Description": "Multiply two numbers",
+    "Endpoint": "http://localhost:port/MULTwoNumbers",
+    "Operands": 2,
+    "OperandType": "integer"
   }
 ]
