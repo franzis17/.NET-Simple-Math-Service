@@ -9,7 +9,8 @@ namespace MathAppClassLibrary
 {
     /**
      * Save/Load/Delete user info in a file used by Authenticator
-     * Files are located in -> DC_MathServicesApp\TesterConsoleApp\bin\Debug
+     * Files are located in -> DC_MathServicesApp\{Client}\bin\Debug
+     *   - Client = console app that invoked FileManager functions (e.g. Authenticator)
      */
     public class FileManager
     {

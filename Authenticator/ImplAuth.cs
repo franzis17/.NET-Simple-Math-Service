@@ -27,7 +27,10 @@ namespace Authenticator
             fileManager = new FileManager();
         }
 
-        /** Save username and password in a local text file */
+        /** 
+         * Save username and password in a local text file
+         *   - RETURN "Successfully Registered" if registering user is successful
+         */
         public string Register(string username, string password)
         {
             bool userInfoSaved = fileManager.SaveUserInfo(username, password);
@@ -38,6 +41,10 @@ namespace Authenticator
             return "Error: Failed to save user info";
         }
 
+        /**
+         * Checks txt file if username & password exists
+         *   - RETURN token if a user exists
+         */
         public int Login(string username, string password)
         {
             int token = 0;

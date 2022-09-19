@@ -12,8 +12,6 @@ namespace Authenticator
      */
     internal class Program
     {
-        private IAuth authServer;
-
         static void Main(string[] args)
         {
             Console.WriteLine("Initiating Authenticator Server...");
@@ -21,7 +19,7 @@ namespace Authenticator
             NetTcpBinding tcp = new NetTcpBinding();
             ServiceHost host = new ServiceHost(typeof(ImplAuth));
 
-            host.AddServiceEndpoint(typeof(IAuth), tcp, "net.tcp://0.0.0.0:8100/AuthenticationService");
+            host.AddServiceEndpoint(typeof(IAuth), tcp, "net.tcp://0.0.0.0:8100/AuthenticatorService");
             host.Open();
 
             Console.WriteLine("Server is online");

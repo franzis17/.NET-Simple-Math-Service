@@ -20,19 +20,9 @@ namespace MathAppClassLibrary
             this.password = password;
         }
 
-        public string GetUsername()
-        {
-            return username;
-        }
-
-        public string GetPassword()
-        {
-            return password;
-        }
-
         public bool Matches(string username, string password)
         {
-            return String.Equals(this.username, username) && String.Equals(this.password, password);
+            return this.username.Equals(username) && this.password.Equals(password);
         }
     }
 }

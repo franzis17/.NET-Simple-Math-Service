@@ -20,9 +20,30 @@ namespace ClientGUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private LoginPage loginPage;
+        private RegisterPage registerPage;
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void LoginBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (loginPage == null)
+            {
+                loginPage = new LoginPage();
+            }
+            MainFrame.Content = loginPage;
+        }
+
+        private void RegisterBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (registerPage == null)
+            {
+                registerPage = new RegisterPage();
+            }
+            MainFrame.Content = registerPage;
         }
     }
 }

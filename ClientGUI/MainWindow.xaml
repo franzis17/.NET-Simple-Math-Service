@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="700" Width="1000">
     <Grid>
-        
+        <Button x:Name="LoginPageBtn" Content="Login" Margin="300,15,0,0" Click="LoginBtn_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60"/>
+        <Button x:Name="RegPageBtn" Content="Register" Margin="0,15,300,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="60" Click="RegisterBtn_Click"/>
+        <Frame x:Name="MainFrame" Content="" NavigationUIVisibility="Hidden" Margin="0,50,0,0"/>
     </Grid>
 </Window>
