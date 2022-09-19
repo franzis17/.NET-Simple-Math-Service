@@ -1,0 +1,23 @@
+﻿[
+  {
+      "Name": "ADDTwoNumbers",
+      "Description": "Adding two numbers",
+      "Endpoint": "http://localhost:port/ADDTwoNumbers",
+      "Operands": 2,
+      "OperandType": "integer"
+  },
+  {
+    "Name": "ADDThreeNumbers",
+    "Description": "Adding three numbers",
+    "Endpoint": "http://localhost:port/ADDThreeNumbers",
+    "Operands": 3,
+    "OperandType": "integer"
+  },
+  {
+    "Name": "MulThreeNumbers",
+    "Description": "Multiply three numbers",
+    "Endpoint": "http://localhost:port/MULThreeNumbers",
+    "Operands": 3,
+    "OperandType": "integer"
+  }
+]

@@ -14,7 +14,7 @@ namespace ServiceProvider.Controllers
         [Route("add/{numOne}/{numTwo}")]
         [Route("add")]
         [HttpGet]
-        public IHttpActionResult AddTwoNumbers(int numOne, int numTwo)
+        public IHttpActionResult addTwoNumbers(int numOne, int numTwo)
         {
             //validate
 
@@ -33,7 +33,7 @@ namespace ServiceProvider.Controllers
         [Route("mul/{numOne}/{numTwo}")]
         [Route("mul")]
         [HttpGet]
-        public IHttpActionResult mullTwoNumbers(int numOne, int numTwo)
+        public IHttpActionResult mulTwoNumbers(int numOne, int numTwo)
         {
             //validate
             return Ok(numOne * numTwo);
@@ -42,7 +42,7 @@ namespace ServiceProvider.Controllers
         [Route("mul/{numOne}/{numTwo}/{numThree}")]
         [Route("mul")]
         [HttpGet]
-        public IHttpActionResult mullThreeNumbers(int numOne, int numTwo, int numThree)
+        public IHttpActionResult mulThreeNumbers(int numOne, int numTwo, int numThree)
         {
             //validate
             return Ok(numOne * numTwo * numThree);
