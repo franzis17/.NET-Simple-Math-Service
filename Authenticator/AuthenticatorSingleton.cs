@@ -12,14 +12,15 @@ namespace Authenticator
         /** Singleton instance */
         private static IAuth authServerInstance  = null;
 
+        public static string auth_URL = "net.tcp://localhost:8100/AuthenticatorService";
+
         public static IAuth GetInstance()
         {
             if (authServerInstance == null)
             {
-                // Set URL and create the connection for the BankBusinessServer to communicate with the BankServer
+                // Set URL and create the connection to the Authentication Server
                 NetTcpBinding tcp = new NetTcpBinding();
-                string URL = "net.tcp://localhost:8100/AuthenticatorService";
-                ChannelFactory<IAuth> authFactory = new ChannelFactory<IAuth>(tcp, URL);
+                ChannelFactory<IAuth> authFactory = new ChannelFactory<IAuth>(tcp, auth_URL);
                 authServerInstance = authFactory.CreateChannel();
             }
             return authServerInstance;

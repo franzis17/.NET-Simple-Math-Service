@@ -38,7 +38,14 @@ namespace ClientGUI
             try
             {
                 int token = auth.Login(LoginUserTxtBox.Text, LoginPassTxtBox.Text);
-                GUI_Utility.ShowStatusLabel(LoginStatusLabel, "Successfully Logged In!");
+                if (token != 0)
+                {
+                    GUI_Utility.ShowStatusLabel(LoginStatusLabel, "Successfully Logged In!");
+                }
+                else
+                {
+                    GUI_Utility.ShowStatusLabel(LoginStatusLabel, "User not found");
+                }
 
                 // TO DO: token must be saved in program memory (Singleton Pseudo-Database ?)
                 

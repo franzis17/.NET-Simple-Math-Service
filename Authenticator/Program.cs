@@ -19,7 +19,7 @@ namespace Authenticator
             NetTcpBinding tcp = new NetTcpBinding();
             ServiceHost host = new ServiceHost(typeof(ImplAuth));
 
-            host.AddServiceEndpoint(typeof(IAuth), tcp, "net.tcp://0.0.0.0:8100/AuthenticatorService");
+            host.AddServiceEndpoint(typeof(IAuth), tcp, AuthenticatorSingleton.auth_URL);
             host.Open();
 
             Console.WriteLine("Server is online");
