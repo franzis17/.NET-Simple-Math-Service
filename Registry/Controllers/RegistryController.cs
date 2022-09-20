@@ -8,122 +8,158 @@ namespace Registry.Controllers
     [RoutePrefix("api/registry")]
     public class RegistryController : ApiController
     {
-        private Authenticator.IAuth authenticator;
+        //Gets singleton of the Authenticator
+        private Authenticator.IAuth authenticator = Authenticator.AuthenticatorSingleton.GetInstance();
 
-        public RegistryController()
-        {
-            
-        }
-
+        //Helper function to grab a list of services from the text file
         private IEnumerable<Service> GetServices()
         {
             return ServiceList.AllServices();
         }
 
+        //Helper function to Authenticate a token with the Authenticator service
+        private bool Authenticate(int token)
+        {
+            string result = authenticator.Validate(token);
+            return result.Equals("validated");
+        }
+
+        /**
+         * Type: GET
+         * Description: Given a search term string, search the registered services matching the search term
+         * Params: token (int), searchTerm (string)
+         * Returns: list of JSON objects (service descriptions)
+         * **/
         [Route("services/{token}/{searchTerm}")]
         [Route("services")]
         [HttpGet]
-        public IHttpActionResult GetServiceBySearch(AuthenticationToken token, string searchTerm)
+        public IHttpActionResult GetServiceBySearch(int token, string searchTerm)
         {
-            //validate user
-            //if user OK
-                //open text file
-                //parse text file for services with descriptions matcing search term
-                //return results and status OK
-            //else
-                //return denied
-
-            var searchResults = new List<Service>();
-
-            foreach (Service service in GetServices())
+            if (Authenticate(token))
             {
-                if (service.Description.ToLower().Contains(searchTerm.ToLower()) || service.Name.ToLower().Contains(searchTerm.ToLower()))
+                var searchResults = new List<Service>();
+
+                foreach (Service service in GetServices())
+                {
+                    if (service.Description.ToLower().Contains(searchTerm.ToLower()) || service.Name.ToLower().Contains(searchTerm.ToLower()))
+                    {
+                        searchResults.Add(service);
+                    }
+                }
+                if (searchResults.Count() > 0)
+                {
+                    return Ok(searchResults);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            else
+            {
+                return Ok(new InvalidUserModel() { Status = "Denied", Reason = "Authentication Error" });
+            }
+        }
+
+
+        /**
+         * Type: GET
+         * Description: Returns all registered services
+         * Params: token (int)
+         * Returns: list of JSON objects (service descriptions)
+         * **/
+        [Route("services/{token}")]
+        [Route("services")]
+        [HttpGet]
+        public IHttpActionResult GetAllServices(int token)
+        {
+            if (Authenticate(token))
+            {
+                var searchResults = new List<Service>();
+
+                foreach (Service service in GetServices())
                 {
                     searchResults.Add(service);
                 }
-            }
-            if (searchResults.Count() > 0)
-            {
-                return Ok(searchResults);
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
 
-        [Route("services/{token}")]
-        [HttpGet]
-        public IHttpActionResult GetAllServices(AuthenticationToken token)
-        {
-            //validate user
-            //if user OK
-            //open text file
-            //return results and status OK
-            //else
-            //return denied
+                if (searchResults.Count() > 0)
+                {
 
-            var searchResults = new List<Service>();
-
-            foreach (Service service in GetServices())
-            {
-                searchResults.Add(service);
-            }
-
-            if (searchResults.Count() > 0)
-            {
-
-                return Ok(searchResults);
+                    return Ok(searchResults);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             else
             {
-                return NotFound();
+                return Ok(new InvalidUserModel() { Status = "Denied", Reason = "Authentication Error" });
             }
         }
 
+        /**
+         * Type: POST
+         * Description: Publish a service to the registry
+         * Params: token (int)
+         * Body: JSON object matching the Service model (found in /Models)
+         * Returns: Nothing
+         * **/
         [Route("publish/{token}/{service}")]
         [Route("publish")]
         [HttpPost]
-        public IHttpActionResult PostNewService(AuthenticationToken token, Service service)
+        public IHttpActionResult PostNewService(int token, Service service)
         {
-            //validate user
-            //if user OK
-                //check body matches Service structure
-                //if body is valid JSON
-                    //append service to the service.json file
-                    //return ok
-                //else body is not valid JSON
-                    //return BadRequest("Invalid Data")
-            //else user is not OK
-                //return BadRequest(Bad request JSON)
-
-            if (!ModelState.IsValid)
+            if (Authenticate(token))
             {
-                return BadRequest("Invalid Data");
-            }
-            ServiceList.PublishService(service);
-            return Ok(new InvalidUserModel() { Status = "Denied", Reason = "Authentication Error" });
-        }
-
-        [Route("unpublish/{token}/{service}")]
-        [Route("unpublish")]
-        [HttpPost]
-        public IHttpActionResult PostRemoveService(AuthenticationToken token, Service service)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Invalid Data");
-            }
-
-            if (ServiceList.DeleteService(service))
-            {
-                //found service and deleted
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid Data");
+                }
+                ServiceList.PublishService(service);
                 return Ok();
             }
             else
             {
-                //did not find service
-                return BadRequest();
+                return Ok(new InvalidUserModel() { Status = "Denied", Reason = "Authentication Error" });
+            }
+        }
+
+
+        /**
+         * Type: POST
+         * Description: Unpublish a service to the registry
+         * Params: token (int)
+         * Body: JSON object matching the Service model (found in /Models)
+         * Returns: Nothing
+         * **/
+        [Route("unpublish/{token}/{service}")]
+        [Route("unpublish")]
+        [HttpPost]
+        public IHttpActionResult PostRemoveService(int token, Service service)
+        {
+
+            if (Authenticate(token))
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid Data");
+                }
+
+                if (ServiceList.DeleteService(service))
+                {
+                    //found service and deleted
+                    return Ok();
+                }
+                else
+                {
+                    //did not find service
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return Ok(new InvalidUserModel() { Status = "Denied", Reason = "Authentication Error" });
             }
         }
     }

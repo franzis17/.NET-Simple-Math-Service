@@ -9,6 +9,6 @@ namespace Registry.Models
     public class AuthenticationToken
     {
         [Required]
-        public string Token { get; set; }
+        public int Token { get; set; }
     }
 }
