@@ -117,7 +117,7 @@ namespace Registry.Controllers
                     return BadRequest("Invalid Data");
                 }
                 ServiceList.PublishService(service);
-                return Ok();
+                return Ok(new InvalidUserModel() { Status = "Success", Reason = "" });
             }
             else
             {
@@ -149,7 +149,7 @@ namespace Registry.Controllers
                 if (ServiceList.DeleteService(service))
                 {
                     //found service and deleted
-                    return Ok();
+                    return Ok(new InvalidUserModel() { Status = "Success", Reason = "" });
                 }
                 else
                 {
