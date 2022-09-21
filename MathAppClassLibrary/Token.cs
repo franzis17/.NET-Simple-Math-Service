@@ -21,7 +21,7 @@ namespace MathAppClassLibrary
         }
 
         /** Create a random int ranging from 1 to 50000 */
-        public static int CreateRandomInt()
+        public static int GenerateRandomToken()
         {
             return random.Next(1, 50000);
         }

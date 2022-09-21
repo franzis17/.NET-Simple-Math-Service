@@ -34,7 +34,7 @@ namespace MathAppClassLibrary
         public bool SaveUserInfo(string username, string password)
         {
             bool isFileSaved = false;
-            
+
             try
             {
                 StreamWriter streamWriter = null;

@@ -79,7 +79,7 @@ namespace MathAppClassLibrary
         public void TestSaveToken()
         {
             Console.WriteLine("> Saving Token to file");
-            fileManager.SaveToken(Token.CreateRandomInt());
+            fileManager.SaveToken(Token.GenerateRandomToken());
         }
 
         public void TestLoadTokenList()

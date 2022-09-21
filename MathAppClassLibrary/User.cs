@@ -24,5 +24,14 @@ namespace MathAppClassLibrary
         {
             return this.username.Equals(username) && this.password.Equals(password);
         }
+
+        /** 
+         * If token is 0, that means user wasn't able to login and token wasn't generated, 
+         * likely because user wasn't found in the users.txt file
+         */
+        public static bool TokenNotFound(int token)
+        {
+            return token == 0;
+        }
     }
 }

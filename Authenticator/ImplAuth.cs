@@ -27,6 +27,33 @@ namespace Authenticator
             fileManager = new FileManager();
         }
 
+        /**
+         * Checks txt file if username and password exists
+         *   - RETURN token if a user exists
+         */
+        public int Login(string username, string password)
+        {
+            int token = 0;
+
+            // Load the user info from the local text file
+            List<User> userList = fileManager.LoadUserInfo();
+
+            if (userList.Count != 0)
+            {
+                // If a match is found, create a token(random integer) then save it to tokens.txt file
+                foreach (User user in userList)
+                {
+                    if (user.Matches(username, password))
+                    {
+                        token = Token.GenerateRandomToken();
+                        fileManager.SaveToken(token);
+                    }
+                }
+            }
+
+            return token;
+        }
+
         /** 
          * Save username and password in a local text file
          *   - RETURN "Successfully Registered" if registering user is successful
@@ -42,35 +69,8 @@ namespace Authenticator
         }
 
         /**
-         * Checks txt file if username & password exists
-         *   - RETURN token if a user exists
-         */
-        public int Login(string username, string password)
-        {
-            int token = 0;
-
-            // Load the user info from the local text file
-            List<User> userList = fileManager.LoadUserInfo();
-
-            if (userList.Count != 0)
-            {
-                // If a match is found, create a token(random integer) then save it to tokens txt file
-                foreach (User user in userList)
-                {
-                    if (user.Matches(username, password))
-                    {
-                        token = Token.CreateRandomInt();
-                        fileManager.SaveToken(token);
-                    }
-                }
-            }
-
-            return token;
-        }
-
-        /**
          * Validate if param{token} is already generated in the list
-         *   - RETURN “validated” if token has been generated already else “not validated”
+         *   - RETURN “validated” IF token has been generated already ELSE “not validated”
          */
         public string Validate(int token)
         {

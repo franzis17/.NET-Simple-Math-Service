@@ -154,7 +154,7 @@ namespace Registry.Controllers
                 else
                 {
                     //did not find service
-                    return BadRequest();
+                    return BadRequest("Unable to find service '" + service.Name + "'");
                 }
             }
             else
