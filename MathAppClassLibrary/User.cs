@@ -26,10 +26,10 @@ namespace MathAppClassLibrary
         }
 
         /** 
-         * If token is 0, that means user wasn't able to login and token wasn't generated, 
+         * If token is 0, that means token was not generated due to the user being unable to login
          * likely because user wasn't found in the users.txt file
          */
-        public static bool TokenNotFound(int token)
+        public static bool TokenNotGenerated(int token)
         {
             return token == 0;
         }

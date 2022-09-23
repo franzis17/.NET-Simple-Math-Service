@@ -26,6 +26,10 @@ namespace ClientGUI
     {
         private IAuth auth;
 
+        // TextBox values
+        private string username;
+        private string password;
+
         public RegisterPage()
         {
             InitializeComponent();
@@ -35,32 +39,31 @@ namespace ClientGUI
             auth = AuthenticatorSingleton.GetInstance();
         }
 
-        private void RegUserBtn_Click(object sender, RoutedEventArgs e)
+        private async void RegUserBtn_Click(object sender, RoutedEventArgs e)
         {
             GUI_Utility.HideStatusLabel(RegStatusLabel);
+            
+            username = RegUserTxtBox.Text;
+            password = RegPassTxtBox.Text;
+
+            Task<string> registerTask = new Task<String>(Register);
+            registerTask.Start();
+
             try
             {
-                string regStatus = auth.Register(RegUserTxtBox.Text, RegPassTxtBox.Text);
+                string regStatus = await registerTask;
                 GUI_Utility.ShowStatusLabel(RegStatusLabel, regStatus);
             }
-            catch (System.ServiceModel.EndpointNotFoundException exc)
+            catch (System.ServiceModel.EndpointNotFoundException)
             {
-                Console.WriteLine("Error: Authenticator Server might not be online.\n\t" + exc.Message);
+                string errorMsg = "Error: Authenticator Server might not be online.\n\t";
+                GUI_Utility.ShowErrorStatusLabel(RegStatusLabel, errorMsg);
             }
         }
 
-        private void ShowStatusLabel(Label label, string msg)
+        private string Register()
         {
-            label.Content = msg;
-            label.Visibility = Visibility.Visible;
-        }
-
-        private void HideStatusLabel(Label label)
-        {
-            if (label.Visibility == Visibility.Visible)
-            {
-                label.Visibility = Visibility.Hidden;
-            }
+            return auth.Register(username, password);
         }
     }
 }

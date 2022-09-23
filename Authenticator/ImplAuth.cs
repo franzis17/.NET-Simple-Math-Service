@@ -29,7 +29,7 @@ namespace Authenticator
 
         /**
          * Checks txt file if username and password exists
-         *   - RETURN token if a user exists
+         *   - RETURN token (random int ranging from 1 to 50000) if a user exists. If user can't be found, it returns 0
          */
         public int Login(string username, string password)
         {

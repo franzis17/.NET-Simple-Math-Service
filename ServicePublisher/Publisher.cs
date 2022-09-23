@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Authenticator;
+using ClientGUI;
 using MathAppClassLibrary;
 using Newtonsoft.Json;
 using Registry.Models;
@@ -18,8 +19,6 @@ namespace ServicePublisher
      */
     public class Publisher
     {
-        private const string REGISTRY_URL = "http://localhost:55625/";
-
         private RestClient registryRestClient;
         private IAuth auth;
 
@@ -27,7 +26,7 @@ namespace ServicePublisher
 
         public Publisher()
         {
-            registryRestClient = new RestClient(REGISTRY_URL);
+            registryRestClient = new RestClient(ClientURL.REGISTRY_URL);
             auth = AuthenticatorSingleton.GetInstance();
             userToken = 0;
         }
@@ -61,7 +60,7 @@ namespace ServicePublisher
             string password = Console.ReadLine();
 
             userToken = auth.Login(username, password);
-            if (User.TokenNotFound(userToken))
+            if (User.TokenNotGenerated(userToken))
             {
                 Console.WriteLine("\n>>> Error: User can't be found");
             }
@@ -103,7 +102,7 @@ namespace ServicePublisher
                 restRequest.AddJsonBody(JsonConvert.SerializeObject(service));
                 RestResponse restResponse = registryRestClient.Execute(restRequest);
 
-                InvalidUserModel response = JsonConvert.DeserializeObject<InvalidUserModel>(restResponse.Content);
+                var response = JsonConvert.DeserializeObject<InvalidUserModel>(restResponse.Content);
                 if (response != null && response.Status != null)
                 {
                     switch (response.Status)
@@ -151,7 +150,7 @@ namespace ServicePublisher
             restRequest.AddJsonBody(JsonConvert.SerializeObject(service));
             RestResponse restResponse = registryRestClient.Execute(restRequest);
 
-            InvalidUserModel response = JsonConvert.DeserializeObject<InvalidUserModel>(restResponse.Content);
+            var response = JsonConvert.DeserializeObject<InvalidUserModel>(restResponse.Content);
             if (response != null && response.Status != null)
             {
                 switch (response.Status)

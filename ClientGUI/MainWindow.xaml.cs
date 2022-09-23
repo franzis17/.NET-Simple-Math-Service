@@ -20,8 +20,8 @@ namespace ClientGUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private LoginPage loginPage;
-        private RegisterPage registerPage;
+        // User's log-in token
+        public static int userToken = 0;
 
         public MainWindow()
         {
@@ -30,20 +30,19 @@ namespace ClientGUI
 
         private void LoginBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (loginPage == null)
-            {
-                loginPage = new LoginPage();
-            }
-            MainFrame.Content = loginPage;
+            MainFrame.Content = new LoginPage();
         }
 
         private void RegisterBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (registerPage == null)
-            {
-                registerPage = new RegisterPage();
-            }
-            MainFrame.Content = registerPage;
+            MainFrame.Content = new RegisterPage();
+        }
+
+        private void ShowServicesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ShowServicesPage showServicesPage = new ShowServicesPage();
+            MainFrame.Content = showServicesPage;
+            showServicesPage.ShowAllServices();
         }
     }
 }

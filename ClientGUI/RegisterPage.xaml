@@ -8,15 +8,13 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="RegisterPage">
 
-    <Grid>
-        <Canvas Background="#FFE68282">
-            <Label Content="Register" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" FontSize="20" Canvas.Left="28" Canvas.Top="30"/>
-            <Label Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="250" Canvas.Top="100" FontWeight="Bold"/>
-            <TextBox x:Name="RegUserTxtBox" Canvas.Left="255" TextWrapping="Wrap" Text="username" Canvas.Top="140" Width="120"/>
-            <Label Content="Password" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="250" Canvas.Top="200" FontWeight="Bold"/>
-            <TextBox x:Name="RegPassTxtBox" Canvas.Left="255" TextWrapping="Wrap" Text="password" Canvas.Top="240" Width="120"/>
-            <Button x:Name="RegUserBtn" Content="Register" Canvas.Left="255" Canvas.Top="315" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Click="RegUserBtn_Click"/>
-            <Label x:Name="RegStatusLabel" Content="Register Status" Canvas.Left="250" Canvas.Top="368" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FF57B100" FontWeight="Bold"/>
-        </Canvas>
+    <Grid Background="White">
+        <Label x:Name="RegisterLabel" Content="Register" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,50,0,0" FontWeight="Bold" FontSize="24"/>
+        <Label Content="Username" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,60,120"/>
+        <Label Content="Password" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Margin="0,20,60,0"/>
+        <TextBox x:Name="RegUserTxtBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Margin="0,0,0,70"/>
+        <TextBox x:Name="RegPassTxtBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Margin="0,70,0,0"/>
+        <Button x:Name="RegUserBtn" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,140,73,0" Click="RegUserBtn_Click"/>
+        <Label x:Name="RegStatusLabel" Content="Register Status" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF139A00" Margin="0,220,0,0"/>
     </Grid>
 </Page>

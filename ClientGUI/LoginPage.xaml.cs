@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using MathAppClassLibrary;
+
 namespace ClientGUI
 {
     /// <summary>
@@ -23,37 +25,51 @@ namespace ClientGUI
     {
         private IAuth auth;
 
+        // TextBox values
+        private string username;
+        private string password;
+
         public LoginPage()
         {
             InitializeComponent();
             
             GUI_Utility.HideStatusLabel(LoginStatusLabel);
-
+            
             auth = AuthenticatorSingleton.GetInstance();
         }
 
-        private void LoginUserBtn_Click(object sender, RoutedEventArgs e)
+        private async void LoginUserBtn_Click(object sender, RoutedEventArgs e)
         {
             GUI_Utility.HideStatusLabel(LoginStatusLabel);
+
+            username = LoginUserTxtBox.Text;
+            password = LoginPassTxtBox.Text;
+
+            Task<int> loginTask = new Task<int>(Login);
+            loginTask.Start();
+
             try
             {
-                int token = auth.Login(LoginUserTxtBox.Text, LoginPassTxtBox.Text);
-                if (token != 0)
+                MainWindow.userToken = await loginTask;
+                if (User.TokenNotGenerated(MainWindow.userToken))
                 {
-                    GUI_Utility.ShowStatusLabel(LoginStatusLabel, "Successfully Logged In!");
+                    GUI_Utility.ShowErrorStatusLabel(LoginStatusLabel, "Error: User not found");
                 }
                 else
                 {
-                    GUI_Utility.ShowStatusLabel(LoginStatusLabel, "User not found");
+                    GUI_Utility.ShowStatusLabel(LoginStatusLabel, "Successfully Logged In!");
                 }
-
-                // TO DO: token must be saved in program memory (Singleton Pseudo-Database ?)
-                
             }
-            catch (System.ServiceModel.EndpointNotFoundException exc)
+            catch (System.ServiceModel.EndpointNotFoundException)
             {
-                Console.WriteLine("Error: Authenticator Server might not be online.\n\t" + exc.Message);
+                string errorMsg = "Error: Authenticator Server might not be online.\n\t";
+                GUI_Utility.ShowErrorStatusLabel(LoginStatusLabel, errorMsg);
             }
+        }
+
+        private int Login()
+        {
+            return auth.Login(username, password);
         }
     }
 }
