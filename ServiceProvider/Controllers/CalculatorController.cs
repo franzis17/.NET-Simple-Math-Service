@@ -30,7 +30,7 @@ namespace ServiceProvider.Controllers
         [Route("add/{token}/{numOne}/{numTwo}")]
         [Route("add")]
         [HttpGet]
-        public IHttpActionResult addTwoNumbers(int token, int numOne, int numTwo)
+        public IHttpActionResult AddTwoNumbers(int token, int numOne, int numTwo)
         {
             //validate
             if (Authenticate(token))
@@ -52,9 +52,8 @@ namespace ServiceProvider.Controllers
         [Route("add/{token}/{numOne}/{numTwo}/{numThree}")]
         [Route("add")]
         [HttpGet]
-        public IHttpActionResult addThreeNumbers(int token, int numOne, int numTwo, int numThree)
+        public IHttpActionResult AddThreeNumbers(int token, int numOne, int numTwo, int numThree)
         {
-
             if (Authenticate(token))
             {
                 return Ok(numOne + numTwo + numThree);
@@ -74,10 +73,8 @@ namespace ServiceProvider.Controllers
         [Route("mul/{token}/{numOne}/{numTwo}")]
         [Route("mul")]
         [HttpGet]
-        public IHttpActionResult mulTwoNumbers(int token, int numOne, int numTwo)
+        public IHttpActionResult MulTwoNumbers(int token, int numOne, int numTwo)
         {
-            //validate
-
             if (Authenticate(token))
             {
                 return Ok(numOne * numTwo);
@@ -97,9 +94,8 @@ namespace ServiceProvider.Controllers
         [Route("mul/{token}/{numOne}/{numTwo}/{numThree}")]
         [Route("mul")]
         [HttpGet]
-        public IHttpActionResult mulThreeNumbers(int token, int numOne, int numTwo, int numThree)
+        public IHttpActionResult MulThreeNumbers(int token, int numOne, int numTwo, int numThree)
         {
-
             if (Authenticate(token))
             {
                 return Ok(numOne * numTwo * numThree);
