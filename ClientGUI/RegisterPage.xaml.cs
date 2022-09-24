@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Remoting.Channels;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,15 +27,13 @@ namespace ClientGUI
     {
         private IAuth auth;
 
-        // TextBox values
         private string username;
         private string password;
 
         public RegisterPage()
         {
             InitializeComponent();
-
-            GUI_Utility.HideStatusLabel(RegStatusLabel);
+            GUI_Utility.HideControls(new Control[] { RegStatusLabel, Reg_ProgBar });
 
             auth = AuthenticatorSingleton.GetInstance();
         }
@@ -42,6 +41,7 @@ namespace ClientGUI
         private async void RegUserBtn_Click(object sender, RoutedEventArgs e)
         {
             GUI_Utility.HideStatusLabel(RegStatusLabel);
+            GUI_Utility.ShowProgressBar(Reg_ProgBar);
             
             username = RegUserTxtBox.Text;
             password = RegPassTxtBox.Text;
@@ -53,16 +53,17 @@ namespace ClientGUI
             {
                 string regStatus = await registerTask;
                 GUI_Utility.ShowStatusLabel(RegStatusLabel, regStatus);
+                GUI_Utility.HideProgressBar(Reg_ProgBar);
             }
             catch (System.ServiceModel.EndpointNotFoundException)
             {
-                string errorMsg = "Error: Authenticator Server might not be online.\n\t";
-                GUI_Utility.ShowErrorStatusLabel(RegStatusLabel, errorMsg);
+                GUI_Utility.ShowMessageBox("Error: Authenticator Server might not be online");
             }
         }
 
         private string Register()
         {
+            Thread.Sleep(1000);
             return auth.Register(username, password);
         }
     }

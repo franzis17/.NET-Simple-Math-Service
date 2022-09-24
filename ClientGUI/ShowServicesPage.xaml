@@ -10,8 +10,8 @@
 
     <Grid Background="White">
         <Label x:Name="LoginLabel" Content="Math Services" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,50,0,0" FontWeight="Bold" FontSize="24"/>
-        <Label x:Name="SvcStatusLabel" Content="Status Label" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="Red" Margin="0,80,0,0"/>
-        <ListView x:Name="ServicesListView" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,170,0,0">
+        <Label x:Name="SvcStatusLabel" Content="Status Label" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" Margin="0,0,0,400"/>
+        <ListView x:Name="ServicesListView" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,150">
             <ListView.View>
                 <GridView ColumnHeaderToolTip="Math Services Information">
                     <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}"/>
@@ -25,13 +25,15 @@
             </ListView.ItemContainerStyle>
         </ListView>
 
-        <TextBox x:Name="SearchTxtBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="0,130,210,0" Height="20"/>
-        <Button x:Name="SearchServiceBtn" Content="Search" HorizontalAlignment="Center" Margin="0,130,0,0" VerticalAlignment="Top" Height="20" Click="SearchServiceBtn_Click"/>
+        <TextBox x:Name="SearchTxtBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Margin="0,0,210,320" Height="20"/>
+        <Button x:Name="SearchServiceBtn" Content="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Height="20" Click="SearchServiceBtn_Click" Margin="0,0,0,320"/>
+        <ProgressBar x:Name="Search_ProgBar" HorizontalAlignment="Center" Height="10" VerticalAlignment="Center" Width="100" Margin="200,0,0,320"/>
 
         <WrapPanel x:Name="MathOp_WrapPanel" VerticalAlignment="Center" HorizontalAlignment="Center" Width="250" Height="180" Margin="0,200,0,0">
         </WrapPanel>
 
         <Label x:Name="Answer_Label" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,420,0,0" FontWeight="Bold" Foreground="#FF0090FF"/>
         <Button x:Name="Calc_Btn" Content="Calculate" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,470,0,0" Click="Calc_Btn_Click"/>
+        <ProgressBar x:Name="Calc_ProgBar" HorizontalAlignment="Center" Height="10" VerticalAlignment="Center" Width="100" Margin="0,520,0,0"/>
     </Grid>
 </Page>

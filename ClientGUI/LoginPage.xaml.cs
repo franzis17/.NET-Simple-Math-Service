@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using MathAppClassLibrary;
+using System.Threading;
 
 namespace ClientGUI
 {
@@ -25,22 +26,22 @@ namespace ClientGUI
     {
         private IAuth auth;
 
-        // TextBox values
         private string username;
         private string password;
 
         public LoginPage()
         {
             InitializeComponent();
-            
-            GUI_Utility.HideStatusLabel(LoginStatusLabel);
-            
+            Control[] control_arr = new Control[] { LoginStatusLabel, Login_ProgBar };
+            GUI_Utility.HideControls(new Control[] { LoginStatusLabel, Login_ProgBar });
+
             auth = AuthenticatorSingleton.GetInstance();
         }
 
         private async void LoginUserBtn_Click(object sender, RoutedEventArgs e)
         {
             GUI_Utility.HideStatusLabel(LoginStatusLabel);
+            GUI_Utility.ShowProgressBar(Login_ProgBar);
 
             username = LoginUserTxtBox.Text;
             password = LoginPassTxtBox.Text;
@@ -53,22 +54,23 @@ namespace ClientGUI
                 MainWindow.userToken = await loginTask;
                 if (User.TokenNotGenerated(MainWindow.userToken))
                 {
-                    GUI_Utility.ShowErrorStatusLabel(LoginStatusLabel, "Error: User not found");
+                    GUI_Utility.ShowMessageBox("Error: User not found");
                 }
                 else
                 {
                     GUI_Utility.ShowStatusLabel(LoginStatusLabel, "Successfully Logged In!");
                 }
+                GUI_Utility.HideProgressBar(Login_ProgBar);
             }
             catch (System.ServiceModel.EndpointNotFoundException)
             {
-                string errorMsg = "Error: Authenticator Server might not be online.\n\t";
-                GUI_Utility.ShowErrorStatusLabel(LoginStatusLabel, errorMsg);
+                GUI_Utility.ShowMessageBox("Error: Authenticator Server might not be online");
             }
         }
 
         private int Login()
         {
+            Thread.Sleep(1000);
             return auth.Login(username, password);
         }
     }

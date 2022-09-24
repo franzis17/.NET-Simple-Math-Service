@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,15 +41,26 @@ namespace ClientGUI
             serviceProviderRestClient = new RestClient(ClientURL.SERVICEPROVIDER_URL);
         }
 
+        public void Start()
+        {
+            Control[] control_arr = new Control[]
+            {
+                SvcStatusLabel, Calc_Btn, Answer_Label, Search_ProgBar, Calc_ProgBar
+            };
+            GUI_Utility.HideControls(control_arr);
+            ShowAllServices();
+        }
+
         public async void ShowAllServices()
         {
-            Control[] controls = new Control[] { SvcStatusLabel, Calc_Btn, Answer_Label };
-            GUI_Utility.HideControls(controls);
+            GUI_Utility.HideControls(new Control[] { Answer_Label });
+            GUI_Utility.ShowProgressBar(Search_ProgBar);
 
             Task<List<Service>> taskGetAllServices = new Task<List<Service>>(GetAllServices);
             taskGetAllServices.Start();
 
             List<Service> services = await taskGetAllServices;
+            GUI_Utility.HideProgressBar(Search_ProgBar);
             if (services != null)
             {
                 ServicesListView.ItemsSource = services;
@@ -58,6 +70,7 @@ namespace ClientGUI
         /** Async Task for getting List of Services from Registry */
         private List<Service> GetAllServices()
         {
+            Thread.Sleep(1000);
             RestRequest restRequest = new RestRequest("api/registry/services/{token}", Method.Get);
             restRequest.AddUrlSegment("token", MainWindow.userToken);
             RestResponse restResponse = registryRestClient.Execute(restRequest);
@@ -71,23 +84,33 @@ namespace ClientGUI
 
         private async void SearchServiceBtn_Click(object sender, RoutedEventArgs e)
         {
+            MathOp_WrapPanel.Children.Clear();
             GUI_Utility.HideStatusLabel(SvcStatusLabel);
+            GUI_Utility.ShowProgressBar(Search_ProgBar);
 
             searchTerm = SearchTxtBox.Text;
-
-            Task<List<Service>> searchServiceTask = new Task<List<Service>>(SearchService);
-            searchServiceTask.Start();
-
-            List<Service> services = await searchServiceTask;
-            if (services != null)
+            if (searchTerm == "")
             {
-                ServicesListView.ItemsSource = services;
+                ShowAllServices();
+            }
+            else
+            {
+                Task<List<Service>> searchServiceTask = new Task<List<Service>>(SearchService);
+                searchServiceTask.Start();
+
+                List<Service> services = await searchServiceTask;
+                GUI_Utility.HideProgressBar(Search_ProgBar);
+                if (services != null)
+                {
+                    ServicesListView.ItemsSource = services;
+                }
             }
         }
 
         /** Async Task for Searching a service */
         private List<Service> SearchService()
         {
+            Thread.Sleep(1000);
             RestRequest restRequest = new RestRequest("api/registry/services/{token}/{searchTerm}", Method.Get);
             restRequest.AddUrlSegment("token", MainWindow.userToken);
             restRequest.AddUrlSegment("searchTerm", searchTerm);
@@ -132,6 +155,8 @@ namespace ClientGUI
         /** Calculate and Show the answer of the operation obtained from Service Provider */
         private async void Calc_Btn_Click(object sender, RoutedEventArgs e)
         {
+            GUI_Utility.ShowProgressBar(Calc_ProgBar);
+
             numInputsArr = GetNumInputsFromTxtBox();
             if (numInputsArr != null)
             {
@@ -142,6 +167,7 @@ namespace ClientGUI
 
                 Answer_Label.Content = "Answer = " + answer;
                 Answer_Label.Visibility = Visibility.Visible;
+                GUI_Utility.HideProgressBar(Calc_ProgBar);
             }
         }
 
@@ -151,6 +177,7 @@ namespace ClientGUI
         /// <returns> (int)answer obtained from Service Provider </returns>
         private int CalculateNumbers()
         {
+            Thread.Sleep(1000);
             RestRequest restRequest = new RestRequest(serviceEndpoint, Method.Get);
             restRequest.AddParameter("token", MainWindow.userToken);
 
@@ -196,7 +223,7 @@ namespace ClientGUI
         {
             if (!restResponse.IsSuccessful)
             {
-                string errorMsg = "Error details: " + restResponse.StatusCode + " --> " + restResponse.Content;
+                string errorMsg = "Error: " + restResponse.StatusCode + " --> " + restResponse.Content;
                 GUI_Utility.ShowMessageBox(errorMsg);
                 return false;
             }

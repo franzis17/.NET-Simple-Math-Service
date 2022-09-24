@@ -34,6 +34,15 @@ namespace ClientGUI
             MessageBox.Show(msgBox_msg);
         }
 
+        public static void ShowProgressBar(ProgressBar progressBar)
+        {
+            if (progressBar.Visibility == Visibility.Hidden && progressBar.IsIndeterminate == false)
+            {
+                progressBar.Dispatcher.Invoke(new Action(() => progressBar.Visibility = Visibility.Visible));
+                progressBar.Dispatcher.Invoke(new Action(() => progressBar.IsIndeterminate = true));
+            }    
+        }
+
         public static void ShowErrorStatusLabel(Label label, string msg)
         {
             label.Dispatcher.Invoke(new Action(() => label.Content = msg));
@@ -58,14 +67,23 @@ namespace ClientGUI
 
         /** ----- Hide Controls ----- **/
 
-        public static void HideControls(Control[] control)
+        public static void HideControls(Control[] control_arr)
         {
-            foreach (Control controlInArray in control)
+            foreach (Control control in control_arr)
             {
-                if (controlInArray.Visibility == Visibility.Visible)
+                if (control.Visibility == Visibility.Visible)
                 {
-                    controlInArray.Dispatcher.Invoke(new Action(() => controlInArray.Visibility = Visibility.Hidden));
+                    control.Dispatcher.Invoke(new Action(() => control.Visibility = Visibility.Hidden));
                 }
+            }
+        }
+
+        public static void HideProgressBar(ProgressBar progressBar)
+        {
+            if (progressBar.Visibility == Visibility.Visible && progressBar.IsIndeterminate == true)
+            {
+                progressBar.Dispatcher.Invoke(new Action(() => progressBar.Visibility = Visibility.Hidden));
+                progressBar.Dispatcher.Invoke(new Action(() => progressBar.IsIndeterminate = false));
             }
         }
 

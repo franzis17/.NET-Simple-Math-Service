@@ -42,7 +42,7 @@ namespace ClientGUI
         {
             ShowServicesPage showServicesPage = new ShowServicesPage();
             MainFrame.Content = showServicesPage;
-            showServicesPage.ShowAllServices();
+            showServicesPage.Start();
         }
     }
 }
