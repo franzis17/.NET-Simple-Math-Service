@@ -8,11 +8,9 @@ namespace MathAppClassLibrary
 {
     public class FileManagerTestHarness
     {
-        private FileManager fileManager;
 
         public FileManagerTestHarness()
         {
-            fileManager = new FileManager();
         }
 
         /** Test any user methods of FileManager */
@@ -44,13 +42,13 @@ namespace MathAppClassLibrary
             Console.WriteLine("Enter a password: ");
             string password = Console.ReadLine();
 
-            fileManager.SaveUserInfo(username, password);
+            FileManager.SaveUserInfo(username, password);
         }
 
         public void TestLoadUserInfo()
         {
             Console.WriteLine("> Loading User Info from file");
-            List<User> userList = fileManager.LoadUserInfo();
+            List<User> userList = FileManager.LoadUserInfo();
 
             if (userList.Count != 0)
             {
@@ -69,7 +67,7 @@ namespace MathAppClassLibrary
         public void TestDeleteUserFile()
         {
             Console.WriteLine("> Deleting User File");
-            fileManager.DeleteUserFile();
+            FileManager.DeleteUserFile();
         }
 
 
@@ -79,7 +77,7 @@ namespace MathAppClassLibrary
         public void TestSaveToken()
         {
             Console.WriteLine("> Saving Token to file");
-            fileManager.SaveToken(Token.GenerateRandomToken());
+            FileManager.SaveToken(Token.GenerateRandomToken());
         }
 
         public void TestLoadTokenList()
@@ -88,7 +86,7 @@ namespace MathAppClassLibrary
                 + "\nToken File contains:\n"
             );
 
-            List<Token> tokenList = fileManager.LoadTokenList();
+            List<Token> tokenList = FileManager.LoadTokenList();
 
             // Display tokens in the file
             for (int i = 0; i < tokenList.Count; i++)
@@ -100,7 +98,7 @@ namespace MathAppClassLibrary
         public void TestDeleteTokenFile()
         {
             Console.WriteLine("> Deleting Tokens from file");
-            fileManager.DeleteTokenFile();
+            FileManager.DeleteTokenFile();
         }
     }
 }

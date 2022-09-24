@@ -169,6 +169,8 @@ namespace ClientGUI
                 Answer_Label.Visibility = Visibility.Visible;
                 GUI_Utility.HideProgressBar(Calc_ProgBar);
             }
+
+            GUI_Utility.HideProgressBar(Calc_ProgBar);
         }
 
         /// <summary>

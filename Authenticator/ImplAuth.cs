@@ -6,10 +6,11 @@ using System.ServiceModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 using MathAppClassLibrary;
-using System.ServiceModel.Security.Tokens;
+using System.Windows.Threading;
+using System.Runtime.CompilerServices;
+using System.Timers;
 
 namespace Authenticator
 {
@@ -21,6 +22,8 @@ namespace Authenticator
     internal class ImplAuth : IAuth
     {
         private FileManager fileManager;
+
+        private static int clear_token_interval = 0;
 
         public ImplAuth()
         {
@@ -36,7 +39,7 @@ namespace Authenticator
             int token = 0;
 
             // Load the user info from the local text file
-            List<User> userList = fileManager.LoadUserInfo();
+            List<User> userList = FileManager.LoadUserInfo();
 
             if (userList.Count != 0)
             {
@@ -46,7 +49,7 @@ namespace Authenticator
                     if (user.Matches(username, password))
                     {
                         token = Token.GenerateRandomToken();
-                        fileManager.SaveToken(token);
+                        FileManager.SaveToken(token);
                     }
                 }
             }
@@ -60,7 +63,7 @@ namespace Authenticator
          */
         public string Register(string username, string password)
         {
-            bool userInfoSaved = fileManager.SaveUserInfo(username, password);
+            bool userInfoSaved = FileManager.SaveUserInfo(username, password);
             if (userInfoSaved)
             {
                 return "Sucessfully Registered";
@@ -74,7 +77,7 @@ namespace Authenticator
          */
         public string Validate(int token)
         {
-            List<Token> tokenList = fileManager.LoadTokenList();
+            List<Token> tokenList = FileManager.LoadTokenList();
             foreach (Token listToken in tokenList)
             {
                 if (token == listToken.random_int)
@@ -86,9 +89,29 @@ namespace Authenticator
         }
 
         /**
-         * TBD: Internal function that deletes saved tokens every 'x' minutes
-         * Console should ask the number of minutes for periodical clean-up
-         *   - MUST use multithreading
+         * Internal function that deletes saved tokens every 'x' minutes, uses multithreading
          */
+        public static void ClearTokens(int interval)
+        {
+            clear_token_interval = interval;
+            Task clearTokensTask = new Task(ClearTokensTask);
+            clearTokensTask.Start();
+        }
+
+        private static void ClearTokensTask()
+        {
+            Timer timer = new Timer();
+            timer.Interval = TimeSpan.FromMinutes(clear_token_interval).TotalMilliseconds;
+            timer.Elapsed += Timer_Tick;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+        }
+
+        /** Clear tokens every tick */
+        private static void Timer_Tick(object sender, EventArgs e)
+        {
+            Console.WriteLine("Clearing tokens...");
+            FileManager.ClearTokens();
+        }
     }
 }

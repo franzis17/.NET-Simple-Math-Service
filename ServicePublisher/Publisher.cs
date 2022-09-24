@@ -40,14 +40,7 @@ namespace ServicePublisher
             Console.Write("  Enter password: ");
             string password = Console.ReadLine();
 
-            try
-            {
-                auth.Register(username, password);
-            }
-            catch (EndpointNotFoundException)
-            {
-                Console.WriteLine("\n>>> Error: Authenticator might not be online");
-            }
+            auth.Register(username, password);
         }
 
         public void Login()
@@ -81,8 +74,8 @@ namespace ServicePublisher
                 string name = Console.ReadLine();
                 Console.Write("    Description: ");
                 string desc = Console.ReadLine();
-                Console.Write("    API Endpoint: ");
-                string api_endpoint = Console.ReadLine();
+                Console.Write("    API Endpoint: api/calculator/");
+                string api_endpoint = "api/calculator/" + Console.ReadLine();
                 Console.Write("    Number of operands: ");
                 int numOperands = int.Parse(Console.ReadLine());
                 Console.Write("    Operand Type: ");
@@ -100,25 +93,11 @@ namespace ServicePublisher
                 RestRequest restRequest = new RestRequest("api/registry/publish/{token}/{service}", Method.Post);
                 restRequest.AddUrlSegment("token", userToken);
                 restRequest.AddJsonBody(JsonConvert.SerializeObject(service));
-                RestResponse restResponse = registryRestClient.Execute(restRequest);
 
-                var response = JsonConvert.DeserializeObject<InvalidUserModel>(restResponse.Content);
-                if (response != null && response.Status != null)
+                RestResponse restResponse = registryRestClient.Execute(restRequest);
+                if (SuccessfulResponse(restResponse))
                 {
-                    switch (response.Status)
-                    {
-                        case "Success":
-                            Console.WriteLine("\nSuccessfully published '{0}' Service", name);
-                            break;
-                        case "Denied":
-                            Console.WriteLine("\n>>> Error: Unable to publish '{0}' Service for the reason:", name);
-                            Console.WriteLine("\tReason = {0}", response.Reason);
-                            break;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("\n>>> Error: Unable to publish the service --> {0}", restResponse.Content);
+                    Console.WriteLine("\nSuccessfully published '{0}' Service", name);
                 }
             }
             catch (FormatException)
@@ -148,28 +127,31 @@ namespace ServicePublisher
             RestRequest restRequest = new RestRequest("api/registry/unpublish/{token}/{service}", Method.Post);
             restRequest.AddUrlSegment("token", userToken);
             restRequest.AddJsonBody(JsonConvert.SerializeObject(service));
-            RestResponse restResponse = registryRestClient.Execute(restRequest);
 
-            var response = JsonConvert.DeserializeObject<InvalidUserModel>(restResponse.Content);
-            if (response != null && response.Status != null)
+            RestResponse restResponse = registryRestClient.Execute(restRequest);
+            if (SuccessfulResponse(restResponse))
             {
-                switch (response.Status)
-                {
-                    case "Success":
-                        Console.WriteLine("\nSuccessfully unpublished '{0}' Service", name);
-                        break;
-                    case "Denied":
-                        Console.WriteLine("\n>>> Error: Unable to publish '{0}' Service for the reason:", name);
-                        Console.WriteLine("\tReason = {0}", response.Reason);
-                        break;
-                    default:
-                        Console.WriteLine(restResponse.Content);
-                        break;
-                }
+                Console.WriteLine("\nSuccessfully unpublished '{0}' Service", name);
+            }
+        }
+
+        private bool SuccessfulResponse(RestResponse restResponse)
+        {
+            if (restResponse.Content.Contains("Denied"))
+            {
+                InvalidUserModel response = JsonConvert.DeserializeObject<InvalidUserModel>(restResponse.Content);
+                Console.WriteLine("\n>>> Error: Unable to publish service for the reason:");
+                Console.WriteLine("\tReason = {0}", response.Reason);
+                return false;
+            }
+            else if (!restResponse.IsSuccessful)
+            {
+                Console.WriteLine(">>> Error: " + restResponse.StatusCode + " --> " + restResponse.Content);
+                return false;
             }
             else
             {
-                Console.WriteLine("\n>>> Error: Unable to unpublish the service --> {0}", restResponse.Content);
+                return true;
             }
         }
     }

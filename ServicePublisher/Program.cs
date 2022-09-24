@@ -65,7 +65,11 @@ namespace ServicePublisher
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("\n>>> Error: Must enter a number\n");
+                    Console.WriteLine("\n>>> Error: Must enter a number");
+                }
+                catch (EndpointNotFoundException)
+                {
+                    Console.WriteLine("\n>>> Error: Authenticator might not be online");
                 }
             } while (choice != EXIT_OPTION);
         }

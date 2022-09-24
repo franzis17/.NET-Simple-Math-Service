@@ -14,16 +14,12 @@ namespace MathAppClassLibrary
      */
     public class FileManager
     {
-        private string userFilePath;
-        private string tokenFilePath;
+        private static string userFilePath = "users.txt";
+        private static string tokenFilePath = "tokens.txt";
 
-        public FileManager()
-        {
-            userFilePath = "users.txt";
-            tokenFilePath = "tokens.txt";
-        }
 
         /** ---- User Methods ---- **/
+
 
         /**
          * User info are saved in a text file with the format "username+password"
@@ -31,7 +27,7 @@ namespace MathAppClassLibrary
          * Note: Doesn't account for duplicated user info
          *   - RETURN true if the file is successfully saved
          */
-        public bool SaveUserInfo(string username, string password)
+        public static bool SaveUserInfo(string username, string password)
         {
             bool isFileSaved = false;
 
@@ -67,17 +63,13 @@ namespace MathAppClassLibrary
         /**
          *   - RETURN List of Users saved in the local file
          */
-        public List<User> LoadUserInfo()
+        public static List<User> LoadUserInfo()
         {
             List<User> userList = new List<User>();
 
             try
             {
-                if (!File.Exists(userFilePath))
-                {
-                    Console.WriteLine("Error: Cannot read file because " + userFilePath + " doesn't exist.");
-                }
-                else
+                if (File.Exists(userFilePath))
                 {
                     StreamReader streamReader = File.OpenText(userFilePath);
                     string fileStr = "";
@@ -105,7 +97,7 @@ namespace MathAppClassLibrary
             return userList;
         }
 
-        public void DeleteUserFile()
+        public static void DeleteUserFile()
         {
             File.Delete(userFilePath);
         }
@@ -117,7 +109,7 @@ namespace MathAppClassLibrary
         /**
          * Note: Doesn't account for duplicated tokens in the file
          */
-        public void SaveToken(int token)
+        public static void SaveToken(int token)
         {
             try
             {
@@ -145,17 +137,13 @@ namespace MathAppClassLibrary
             }
         }
 
-        public List<Token> LoadTokenList()
+        public static List<Token> LoadTokenList()
         {
             List<Token> tokenList = new List<Token>();
 
             try
             {
-                if (!File.Exists(tokenFilePath))
-                {
-                    Console.WriteLine("Error: Cannot read file because " + tokenFilePath + " doesn't exist.");
-                }
-                else
+                if (File.Exists(tokenFilePath))
                 {
                     StreamReader streamReader = File.OpenText(tokenFilePath);
                     string fileStr = "";
@@ -183,7 +171,22 @@ namespace MathAppClassLibrary
             return tokenList;
         }
 
-        public void DeleteTokenFile()
+        public static void ClearTokens()
+        {
+            try
+            {
+                if (File.Exists(tokenFilePath))
+                {
+                    DeleteTokenFile();
+                }
+            }
+            catch (IOException io_exc)
+            {
+                Console.WriteLine("Error: IOException occured with message -> " + io_exc);
+            }
+        }
+
+        public static void DeleteTokenFile()
         {
             File.Delete(tokenFilePath);
         }

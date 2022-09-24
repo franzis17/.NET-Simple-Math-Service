@@ -5,6 +5,11 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
+using MathAppClassLibrary;
+using System.Windows.Threading;
+using System.Runtime.CompilerServices;
+using System.IO;
+
 namespace Authenticator
 {
     /**
@@ -14,6 +19,23 @@ namespace Authenticator
     {
         static void Main(string[] args)
         {
+            bool continueLoop = false;
+            do
+            {
+                try
+                {
+                    Console.Write("\nEnter minute interval for clearing tokens: ");
+                    int clear_token_interval = Int32.Parse(Console.ReadLine());
+                    ImplAuth.ClearTokens(clear_token_interval);
+                    continueLoop = false;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\n>>> Error: Please enter a number");
+                    continueLoop = true;
+                }
+            } while (continueLoop);
+
             Console.WriteLine("Initiating Authenticator Server...");
 
             NetTcpBinding tcp = new NetTcpBinding();
@@ -21,10 +43,10 @@ namespace Authenticator
 
             host.AddServiceEndpoint(typeof(IAuth), tcp, AuthenticatorSingleton.auth_URL);
             host.Open();
-
             Console.WriteLine("Server is online");
-            Console.ReadLine();
 
+            Console.WriteLine("Press enter to stop authentication server");
+            Console.ReadLine();
             host.Close();
         }
     }
