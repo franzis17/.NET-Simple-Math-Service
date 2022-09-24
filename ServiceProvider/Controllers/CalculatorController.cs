@@ -27,15 +27,14 @@ namespace ServiceProvider.Controllers
          * Params: token (int), numOne (int), numTwo (int)
          * Returns: the result of the two numbers added together
          * **/
-        [Route("add/{token}/{numOne}/{numTwo}")]
-        [Route("add")]
+        [Route("AddTwoNumbers")]
         [HttpGet]
-        public IHttpActionResult AddTwoNumbers(int token, int numOne, int numTwo)
+        public IHttpActionResult AddTwoNumbers(int token, int num1, int num2)
         {
             //validate
             if (Authenticate(token))
             {
-                return Ok(numOne + numTwo);
+                return Ok(num1 + num2);
             }
             else
             {
@@ -49,14 +48,13 @@ namespace ServiceProvider.Controllers
          * Params: token (int), numOne (int), numTwo (int), numThree (int)
          * Returns: the result of the three numbers added together
          * **/
-        [Route("add/{token}/{numOne}/{numTwo}/{numThree}")]
-        [Route("add")]
+        [Route("AddThreeNumbers")]
         [HttpGet]
-        public IHttpActionResult AddThreeNumbers(int token, int numOne, int numTwo, int numThree)
+        public IHttpActionResult AddThreeNumbers(int token, int num1, int num2, int num3)
         {
             if (Authenticate(token))
             {
-                return Ok(numOne + numTwo + numThree);
+                return Ok(num1 + num2 + num3);
             }
             else
             {
@@ -70,14 +68,13 @@ namespace ServiceProvider.Controllers
          * Params: token (int), numOne (int), numTwo (int)
          * Returns: the result of the two numbers mulitplied together
          * **/
-        [Route("mul/{token}/{numOne}/{numTwo}")]
-        [Route("mul")]
+        [Route("MulTwoNumbers")]
         [HttpGet]
-        public IHttpActionResult MulTwoNumbers(int token, int numOne, int numTwo)
+        public IHttpActionResult MulTwoNumbers(int token, int num1, int num2)
         {
             if (Authenticate(token))
             {
-                return Ok(numOne * numTwo);
+                return Ok(num1 * num2);
             }
             else
             {
@@ -91,14 +88,13 @@ namespace ServiceProvider.Controllers
          * Params: token (int), numOne (int), numTwo (int), numThree (int)
          * Returns: the result of the three numbers mulitplied together
          * **/
-        [Route("mul/{token}/{numOne}/{numTwo}/{numThree}")]
-        [Route("mul")]
+        [Route("MulThreeNumbers")]
         [HttpGet]
-        public IHttpActionResult MulThreeNumbers(int token, int numOne, int numTwo, int numThree)
+        public IHttpActionResult MulThreeNumbers(int token, int num1, int num2, int num3)
         {
             if (Authenticate(token))
             {
-                return Ok(numOne * numTwo * numThree);
+                return Ok(num1 * num2 * num3);
             }
             else
             {

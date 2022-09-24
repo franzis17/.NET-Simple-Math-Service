@@ -28,6 +28,7 @@ namespace ClientGUI
         private RestClient serviceProviderRestClient;
 
         private TextBox[] mathOp_TxtBoxes;
+        private int[] numInputsArr;
 
         private string searchTerm;
         private string serviceEndpoint;  // Endpoint of selected service in the list
@@ -41,19 +42,14 @@ namespace ClientGUI
 
         public async void ShowAllServices()
         {
-            Control[] controls = new Control[] { SvcStatusLabel, Calc_Btn };
+            Control[] controls = new Control[] { SvcStatusLabel, Calc_Btn, Answer_Label };
             GUI_Utility.HideControls(controls);
 
             Task<List<Service>> taskGetAllServices = new Task<List<Service>>(GetAllServices);
             taskGetAllServices.Start();
 
             List<Service> services = await taskGetAllServices;
-            if (services == null)
-            {
-                // TO DO: Update display error in the GUI
-                Console.WriteLine("Service List is null");
-            }
-            else
+            if (services != null)
             {
                 ServicesListView.ItemsSource = services;
             }
@@ -62,30 +58,15 @@ namespace ClientGUI
         /** Async Task for getting List of Services from Registry */
         private List<Service> GetAllServices()
         {
-            List<Service> services = new List<Service>();
-
             RestRequest restRequest = new RestRequest("api/registry/services/{token}", Method.Get);
             restRequest.AddUrlSegment("token", MainWindow.userToken);
             RestResponse restResponse = registryRestClient.Execute(restRequest);
 
-            if (restResponse.Content.Contains("Status"))
+            if (SuccessfulResponse(restResponse))
             {
-                // Show user invalid response
-                InvalidUserModel response = JsonConvert.DeserializeObject<InvalidUserModel>(restResponse.Content);
-                string statusMsg = String.Format("Error: Failed to get services, Reason = {1}", response.Status, response.Reason);
-                GUI_Utility.ShowMessageBox(statusMsg);
-            }
-            else if (!restResponse.IsSuccessful)
-            {
-                string errorMsg = "Error details: " + restResponse.StatusCode + " --> " + restResponse.Content;
-                GUI_Utility.ShowMessageBox(errorMsg);
-            }
-            else
-            {
-                services = JsonConvert.DeserializeObject<List<Service>>(restResponse.Content);
-            }
-
-            return services;
+                return JsonConvert.DeserializeObject<List<Service>>(restResponse.Content);
+            }    
+            return null;
         }
 
         private async void SearchServiceBtn_Click(object sender, RoutedEventArgs e)
@@ -98,11 +79,7 @@ namespace ClientGUI
             searchServiceTask.Start();
 
             List<Service> services = await searchServiceTask;
-            if (services == null)
-            {
-                // Display error
-            }
-            else
+            if (services != null)
             {
                 ServicesListView.ItemsSource = services;
             }
@@ -116,37 +93,23 @@ namespace ClientGUI
             restRequest.AddUrlSegment("searchTerm", searchTerm);
             RestResponse restResponse = registryRestClient.Execute(restRequest);
 
-            if (restResponse.Content.Contains("Status"))
-            {
-                // Show User Invalid Response
-                InvalidUserModel response = JsonConvert.DeserializeObject<InvalidUserModel>(restResponse.Content);
-                string statusMsg = String.Format("Error: Failed to get services, Reason = {1}", response.Status, response.Reason);
-                GUI_Utility.ShowMessageBox(statusMsg);
-            }
-            else if (!restResponse.IsSuccessful)
-            {
-                string errorMsg = "Error details: " + restResponse.StatusCode + " --> " + restResponse.Content;
-                GUI_Utility.ShowMessageBox(errorMsg);
-            }
-            else
+            if (SuccessfulResponse(restResponse))
             {
                 return JsonConvert.DeserializeObject<List<Service>>(restResponse.Content);
             }
-
             return null;
         }
 
-        /**
-         * Create dynamic amount of TextBox depending on the Service's number of operands that's selected in the list
-         */
+        /** Create dynamic amount of TextBox depending on the Service's number of operands that's selected in the list */
         private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             MathOp_WrapPanel.Children.Clear();  // Clear existing textboxes instantiated before
+            GUI_Utility.HideStatusLabel(Answer_Label);
 
             var item = sender as ListViewItem;
             if (item != null)
             {
-                // Grab the selected service and downcast it from 'Object' to 'Service' datatype
+                // Grab the selected service and typecast it from ListViewItem to 'Service' datatype
                 Service service_item = item.Content as Service;
                 serviceEndpoint = service_item.Endpoint;
 
@@ -154,48 +117,98 @@ namespace ClientGUI
                 mathOp_TxtBoxes = new TextBox[service_item.Operands];
                 for (int i = 0; i < service_item.Operands; i++)
                 {
-                    TextBox mathOp_TxtBox = new TextBox();
-                    mathOp_TxtBox.Text = "Math " + (i+1);
-                    mathOp_TxtBox.Margin = new Thickness(10,0,0,0);
-                    MathOp_WrapPanel.Children.Add(mathOp_TxtBox);
+                    TextBox num_TxtBox = new TextBox();
+                    num_TxtBox.Width = 50;
+                    num_TxtBox.Margin = new Thickness(20,20,0,0);
+                    MathOp_WrapPanel.Children.Add(num_TxtBox);
 
-                    // Add to Array of TextBoxes to obtain inputted numbers later
-                    mathOp_TxtBoxes[i] = mathOp_TxtBox;
+                    mathOp_TxtBoxes[i] = num_TxtBox;
                 }
 
                 GUI_Utility.ShowButton(Calc_Btn);
             }
         }
 
-        /** Sends the inputted numbers to ServiceProvider to do the calculation */
-        private void Calc_Btn_Click(object sender, RoutedEventArgs e)
+        /** Calculate and Show the answer of the operation obtained from Service Provider */
+        private async void Calc_Btn_Click(object sender, RoutedEventArgs e)
         {
-            int[] math_inputs = GetNumInputsFromTxtBox();
-
-            // Send inputs to the appropriate service
-            if (math_inputs.Length != 0)
+            numInputsArr = GetNumInputsFromTxtBox();
+            if (numInputsArr != null)
             {
-                RestRequest restRequest = new RestRequest("api/calculator");
+                Task<int> calculateNumbersTask = new Task<int>(CalculateNumbers);
+                calculateNumbersTask.Start();
+
+                int answer = await calculateNumbersTask;
+
+                Answer_Label.Content = "Answer = " + answer;
+                Answer_Label.Visibility = Visibility.Visible;
             }
         }
 
+        /// <summary>
+        /// Async Task for calculating the inputted numbers
+        /// </summary>
+        /// <returns> (int)answer obtained from Service Provider </returns>
+        private int CalculateNumbers()
+        {
+            RestRequest restRequest = new RestRequest(serviceEndpoint, Method.Get);
+            restRequest.AddParameter("token", MainWindow.userToken);
+
+            if (numInputsArr.Length != 0)
+            {
+                for (int i = 0; i < numInputsArr.Length; i++)
+                {
+                    restRequest.AddParameter(String.Format("num{0}", (i+1)), numInputsArr[i]);
+                }
+
+                RestResponse restResponse = serviceProviderRestClient.Execute(restRequest);
+                if (SuccessfulResponse(restResponse))
+                {
+                    return JsonConvert.DeserializeObject<int>(restResponse.Content);
+                }
+            }
+            return 0;
+        }
+
+        /** Returns an Array of int obtained from TextBoxes to pass as parameters to the math service */
         private int[] GetNumInputsFromTxtBox()
         {
-            int[] math_inputs = new int[mathOp_TxtBoxes.Length];
+            int[] numInputsArr = new int[mathOp_TxtBoxes.Length];
 
             try
             {
                 for (int i = 0; i < mathOp_TxtBoxes.Length; i++)
                 {
-                    math_inputs[i] = Int32.Parse(mathOp_TxtBoxes[i].Text);
+                    numInputsArr[i] = Int32.Parse(mathOp_TxtBoxes[i].Text);
                 }
             }
             catch (FormatException)
             {
                 GUI_Utility.ShowMessageBox("Error: Please input numbers to calculate");
+                return null;
             }
 
-            return math_inputs;
+            return numInputsArr;
+        }
+
+        /** Checks whether or not response is a failure, if it is, show the user error details */
+        private bool SuccessfulResponse(RestResponse restResponse)
+        {
+            if (!restResponse.IsSuccessful)
+            {
+                string errorMsg = "Error details: " + restResponse.StatusCode + " --> " + restResponse.Content;
+                GUI_Utility.ShowMessageBox(errorMsg);
+                return false;
+            }
+            else if (restResponse.Content.Contains("Status"))
+            {
+                // Show User Invalid Response
+                InvalidUserModel response = JsonConvert.DeserializeObject<InvalidUserModel>(restResponse.Content);
+                string statusMsg = String.Format("Error: Failed to get services, Reason = {1}", response.Status, response.Reason);
+                GUI_Utility.ShowMessageBox(statusMsg);
+                return false;
+            }
+            return true;
         }
     }
 }
