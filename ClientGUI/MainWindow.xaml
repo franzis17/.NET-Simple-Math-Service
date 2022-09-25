@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1000">
     <Grid>
-        <Button x:Name="LoginPageBtn" Content="Login" Margin="0,15,650,0" Click="LoginBtn_Click" VerticalAlignment="Top" HorizontalAlignment="Center" Width="60"/>
-        <Button x:Name="RegPageBtn" Content="Register" Margin="0,15,800,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="60" Click="RegisterBtn_Click"/>
+        <Button x:Name="LoginPageBtn" Content="Login" Margin="0,15,650,0" Click="LoginBtn_Click" VerticalAlignment="Top" HorizontalAlignment="Center" Width="60" FontSize="14" FontFamily="Nirmala UI"/>
+        <Button x:Name="RegPageBtn" Content="Register" Margin="0,15,800,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="60" Click="RegisterBtn_Click" FontSize="14" FontFamily="Nirmala UI"/>
         <Frame x:Name="MainFrame" Content="" NavigationUIVisibility="Hidden" Margin="0,50,0,0"/>
-        <Button x:Name="ShowServicesBtn" Content="Show Services" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,15,0,0" Click="ShowServicesBtn_Click"/>
+        <Button x:Name="ShowServicesBtn" Content="Show Services" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,15,0,0" Click="ShowServicesBtn_Click" FontSize="14" FontFamily="Nirmala UI"/>
     </Grid>
 </Window>

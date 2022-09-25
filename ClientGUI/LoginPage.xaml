@@ -10,12 +10,12 @@
 
     <Grid Background="White">
         <Label x:Name="LoginLabel" Content="Login" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,50,0,0" FontWeight="Bold" FontSize="24"/>
-        <Label Content="Username" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,60,120"/>
-        <Label Content="Password" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Margin="0,20,60,0"/>
-        <TextBox x:Name="LoginUserTxtBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Margin="0,0,0,70"/>
-        <TextBox x:Name="LoginPassTxtBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Margin="0,70,0,0"/>
-        <Button x:Name="LoginUserBtn" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,140,87,0" Click="LoginUserBtn_Click"/>
-        <Label x:Name="LoginStatusLabel" Content="Login Status" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF139A00" Margin="0,220,0,0"/>
-        <ProgressBar x:Name="Login_ProgBar" HorizontalAlignment="Center" Height="10" VerticalAlignment="Center" Width="100" Margin="0,250,0,0"/>
+        <Label Content="Username" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,50,120" FontSize="14"/>
+        <Label Content="Password" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Margin="0,20,54,0" FontSize="14"/>
+        <TextBox x:Name="LoginUserTxtBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Margin="0,0,0,70" FontSize="14"/>
+        <TextBox x:Name="LoginPassTxtBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Margin="0,70,0,0" FontSize="14"/>
+        <Button x:Name="LoginUserBtn" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,150,82,0" Click="LoginUserBtn_Click" FontSize="14"/>
+        <Label x:Name="LoginStatusLabel" Content="Login Status" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF139A00" Margin="0,220,0,0" FontSize="14"/>
+        <ProgressBar x:Name="Login_ProgBar" HorizontalAlignment="Center" Height="10" VerticalAlignment="Center" Width="100" Margin="0,260,0,0"/>
     </Grid>
 </Page>

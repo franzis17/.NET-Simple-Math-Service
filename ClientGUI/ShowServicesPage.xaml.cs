@@ -85,7 +85,7 @@ namespace ClientGUI
         private async void SearchServiceBtn_Click(object sender, RoutedEventArgs e)
         {
             MathOp_WrapPanel.Children.Clear();
-            GUI_Utility.HideStatusLabel(SvcStatusLabel);
+            GUI_Utility.HideControls(new Control[] { SvcStatusLabel, Calc_Btn });
             GUI_Utility.ShowProgressBar(Search_ProgBar);
 
             searchTerm = SearchTxtBox.Text;
@@ -132,8 +132,7 @@ namespace ClientGUI
             var item = sender as ListViewItem;
             if (item != null)
             {
-                // Grab the selected service and typecast it from ListViewItem to 'Service' datatype
-                Service service_item = item.Content as Service;
+                Service service_item = item.Content as Service;  // Typecast
                 serviceEndpoint = service_item.Endpoint;
 
                 // Create the input boxes dynamically
@@ -141,11 +140,11 @@ namespace ClientGUI
                 for (int i = 0; i < service_item.Operands; i++)
                 {
                     TextBox num_TxtBox = new TextBox();
+                    num_TxtBox.FontSize = 14;
                     num_TxtBox.Width = 50;
                     num_TxtBox.Margin = new Thickness(20,20,0,0);
                     MathOp_WrapPanel.Children.Add(num_TxtBox);
-
-                    mathOp_TxtBoxes[i] = num_TxtBox;
+                    mathOp_TxtBoxes[i] = num_TxtBox;  // Array will be used to obtain its inputs later when calc button is pressed
                 }
 
                 GUI_Utility.ShowButton(Calc_Btn);
@@ -223,21 +222,28 @@ namespace ClientGUI
         /** Checks whether or not response is a failure, if it is, show the user error details */
         private bool SuccessfulResponse(RestResponse restResponse)
         {
-            if (!restResponse.IsSuccessful)
+            if (restResponse.IsSuccessful)
             {
-                string errorMsg = "Error: " + restResponse.StatusCode + " --> " + restResponse.Content;
-                GUI_Utility.ShowMessageBox(errorMsg);
+                return true;
+            }
+            else if (restResponse.StatusCode == 0)
+            {
+                GUI_Utility.ShowMessageBox("Error: Service Provider Server might not be online");
+                return false;
+            }
+            else if (!restResponse.IsSuccessful)
+            {
+                GUI_Utility.ShowMessageBox("Error: " + restResponse.StatusCode + " --> " + restResponse.Content);
                 return false;
             }
             else if (restResponse.Content.Contains("Status"))
             {
                 // Show User Invalid Response
                 InvalidUserModel response = JsonConvert.DeserializeObject<InvalidUserModel>(restResponse.Content);
-                string statusMsg = String.Format("Error: Failed to get services, Reason = {1}", response.Status, response.Reason);
-                GUI_Utility.ShowMessageBox(statusMsg);
+                GUI_Utility.ShowMessageBox(String.Format("Error: Failed to get services, Reason = {1}", response.Status, response.Reason));
                 return false;
             }
-            return true;
+            return false;
         }
     }
 }

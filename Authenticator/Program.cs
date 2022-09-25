@@ -19,6 +19,15 @@ namespace Authenticator
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Initiating Authenticator Server...");
+
+            NetTcpBinding tcp = new NetTcpBinding();
+            ServiceHost host = new ServiceHost(typeof(ImplAuth));
+
+            host.AddServiceEndpoint(typeof(IAuth), tcp, AuthenticatorSingleton.auth_URL);
+            host.Open();
+            Console.WriteLine("Server is online");
+
             bool continueLoop = false;
             do
             {
@@ -35,15 +44,6 @@ namespace Authenticator
                     continueLoop = true;
                 }
             } while (continueLoop);
-
-            Console.WriteLine("Initiating Authenticator Server...");
-
-            NetTcpBinding tcp = new NetTcpBinding();
-            ServiceHost host = new ServiceHost(typeof(ImplAuth));
-
-            host.AddServiceEndpoint(typeof(IAuth), tcp, AuthenticatorSingleton.auth_URL);
-            host.Open();
-            Console.WriteLine("Server is online");
 
             Console.WriteLine("Press enter to stop authentication server");
             Console.ReadLine();

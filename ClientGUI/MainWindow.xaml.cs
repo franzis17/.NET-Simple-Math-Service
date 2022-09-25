@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ServiceModel;
+using System.Windows;
 
 namespace ClientGUI
 {

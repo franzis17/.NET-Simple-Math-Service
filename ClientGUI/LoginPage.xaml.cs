@@ -49,29 +49,31 @@ namespace ClientGUI
             Task<int> loginTask = new Task<int>(Login);
             loginTask.Start();
 
+            MainWindow.userToken = await loginTask;
+            if (User.TokenNotGenerated(MainWindow.userToken))
+            {
+                GUI_Utility.ShowMessageBox("Error: User not found");
+            }
+            else
+            {
+                GUI_Utility.ShowStatusLabel(LoginStatusLabel, "Successfully Logged In!");
+            }
+            GUI_Utility.HideProgressBar(Login_ProgBar);
+        }
+
+        private int Login()
+        {
+            int token = 0;
             try
             {
-                MainWindow.userToken = await loginTask;
-                if (User.TokenNotGenerated(MainWindow.userToken))
-                {
-                    GUI_Utility.ShowMessageBox("Error: User not found");
-                }
-                else
-                {
-                    GUI_Utility.ShowStatusLabel(LoginStatusLabel, "Successfully Logged In!");
-                }
-                GUI_Utility.HideProgressBar(Login_ProgBar);
+                Thread.Sleep(1000);
+                token = auth.Login(username, password);
             }
             catch (System.ServiceModel.EndpointNotFoundException)
             {
                 GUI_Utility.ShowMessageBox("Error: Authenticator Server might not be online");
             }
-        }
-
-        private int Login()
-        {
-            Thread.Sleep(1000);
-            return auth.Login(username, password);
+            return token;
         }
     }
 }
