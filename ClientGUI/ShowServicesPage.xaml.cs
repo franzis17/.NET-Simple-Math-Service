@@ -222,11 +222,7 @@ namespace ClientGUI
         /** Checks whether or not response is a failure, if it is, show the user error details */
         private bool SuccessfulResponse(RestResponse restResponse)
         {
-            if (restResponse.IsSuccessful)
-            {
-                return true;
-            }
-            else if (restResponse.StatusCode == 0)
+            if (restResponse.StatusCode == 0)
             {
                 GUI_Utility.ShowMessageBox("Error: Service Provider Server might not be online");
                 return false;
@@ -243,7 +239,7 @@ namespace ClientGUI
                 GUI_Utility.ShowMessageBox(String.Format("Error: Failed to get services, Reason = {1}", response.Status, response.Reason));
                 return false;
             }
-            return false;
+            return true;
         }
     }
 }
